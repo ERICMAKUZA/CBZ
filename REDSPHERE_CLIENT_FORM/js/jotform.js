@@ -6182,26 +6182,23 @@ var JotForm = {
         } else if (condition.type == 'url') {
             return (condition.link.toLowerCase() == 'any' && any) || (condition.link.toLowerCase() == 'all' && all);
         } else { // Page condition
+            
             var isConditionValid = (condition.link.toLowerCase() == 'any' && any) || (condition.link.toLowerCase() == 'all' && all);
             if($A(condition.action).length > 0 && condition.action.first().skipHide === 'hidePage') {
                 var action = condition.action.first();
 
                 if (window.FORM_MODE == 'cardform') {
-                  if (isConditionValid) {
+                  if ((condition.link.toLowerCase() == 'any' && any) || (condition.link.toLowerCase() == 'all' && all)) {
                     JotForm.hideField(action.skipTo);
                   } else {
                     JotForm.showField(action.skipTo);
                   }
                 } else {
-                  var pageNumber=parseInt(action.skipTo.replace('page-', ''), 10);
-                  if (isConditionValid) {
-                      if (!JotForm.hidePages[pageNumber]) {
-                        JotForm.hidePages[pageNumber] = {};
-                      }
-                      JotForm.hidePages[pageNumber][condition.id] = true;
-                  } else {
-                      JotForm.hidePages[pageNumber] && delete JotForm.hidePages[pageNumber][condition.id];
-                  }
+                    if ((condition.link.toLowerCase() == 'any' && any) || (condition.link.toLowerCase() == 'all' && all)) {
+                        JotForm.hidePages[parseInt(action.skipTo.replace('page-', ''), 10)] = true;
+                    } else {
+                        JotForm.hidePages[parseInt(action.skipTo.replace('page-', ''), 10)] = false;
+                    }
                 }
                 return;
             }
@@ -7052,7 +7049,7 @@ var JotForm = {
                             return accum + (parseFloat(thisVal.replace(/-?([^0-9])/g, "$1").replace(/[^0-9\.-]/g, "")) || 0);
                         });
                     } else {
-                        val = valArr.join();
+                        val = valArr.join(', ');
                     }
                     break;
 
@@ -8241,10 +8238,17 @@ var JotForm = {
                  try {
                     var source = $$('#id_'+calc.operands+' select');
                     var out = (source[0] ? source[0].value : output);
+                    /**
+                     * Sometimes users can create options with one or more spaces in them.
+                     * This code block was malfunctioning in such cases.
+                     * Hence, if the string which is the value of the selected option
+                     * ends with one or more spaces, those spaces are going to be removed anymore.
+                     */
+                    var stripped = (/\s$/).test(out) ? out.strip() + ' ' : out.strip();
                     if (result.indexOf('|') > 0) {
-                        $('input_' + result.split('|').join('_field_')).setValue(out.strip());
+                        $('input_' + result.split('|').join('_field_')).setValue(stripped);
                     } else {
-                        $('input_' + result).setValue(out.strip());
+                        $('input_' + result).setValue(stripped);
                     }
                     break;
                 } catch (error) {
@@ -11962,7 +11966,10 @@ var JotForm = {
                     if(e.target.value && /^[0-9]{2}:[0-9]{2}$/.test(e.target.value)) {
                         dateTimeOnComplete(e);
                     }
-                })
+                });
+
+                var changeEvent = new Event('change');
+                inputs[i].dispatchEvent(changeEvent);
 
                 if (navigator.userAgent.match(/Android/i)) {
                     var timeWrapper = inputs[i].parentNode;
@@ -12581,7 +12588,7 @@ var JotForm = {
                     if(!JotForm.nextPage) {
                         var sections = $$('.form-all > .page-section');
                         for(var i=sections.indexOf(section); i<sections.length; i++) {
-                            if(JotForm.hidePages[parseInt(i, 10)+2] && Object.keys(JotForm.hidePages[parseInt(i, 10)+2]).length >0) {
+                            if(JotForm.hidePages[parseInt(i, 10)+2] === true) {
                                 continue;
                             }
                             JotForm.nextPage = sections[parseInt(i, 10)+1];
@@ -12670,7 +12677,7 @@ var JotForm = {
                 var prevPage = JotForm.backStack.pop();
                 while(JotForm.backStack.length > 0) {
                     var pageNumber = sections.indexOf(prevPage) + 1;
-                    if(JotForm.hidePages[pageNumber] && Object.keys(JotForm.hidePages[pageNumber]).length > 0 ) {
+                    if(JotForm.hidePages[pageNumber] === true) {
                         prevPage = JotForm.backStack.pop();
                         continue;
                     }
@@ -14796,17 +14803,16 @@ var JotForm = {
                                 if(range[0].indexOf("{") > -1) {
                                     startDate = JotForm.dateFromField(range[0]);
                                 } else {
-                                    startDate = new Date(range[0]);
+                                    startDate = new Date(range[0].split("-"));
                                 }
                                 var endDate;
                                 if(range[1].indexOf("{") > -1) {
                                     endDate = JotForm.dateFromField(range[1]);
                                 } else {
-                                    endDate = new Date(range[1]);
+                                    endDate = new Date(range[1].split('-'));
                                 }
                                 if(endDate) {
-                                    endDate.setDate(endDate.getDate() + 1);
-                                    if (date.getTime() >= startDate.getTime() && date.getTime() < endDate.getTime()) {
+                                    if (date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()) {
                                         return JotForm.errored(input, JotForm.texts.dateLimited, dontShowMessage);
                                     }
                                 }
@@ -16233,6 +16239,11 @@ var JotForm = {
               }
             break;
           }
+          // simulate the keyup event to fill the fields inside of curly brackets
+          var questionElement = document.getElementById('id_' + question.qid);
+          if (questionElement) {
+              document.getElementById('id_' + question.qid).dispatchEvent(new Event('keyup'));
+          }
         }
       });
         if (window.FORM_MODE === 'cardform') {
@@ -17524,13 +17535,23 @@ var JotForm = {
                 }
 
                 if (field === null) {
-                    var qid = '';
-                    if (pair.key.indexOf('hour_') > -1) {
-                        qid = pair.key.replace('hour_', '');
-                        field = $('input_' + qid + '_hourSelect');
-                    } else if (pair.key.indexOf('min_') > -1) {
-                        qid = pair.key.replace('min_', '');
-                        field = $('input_' + qid + '_minuteSelect');
+
+                    // check whether zero index value is exist
+                    var idStringSections = pair.key.split("_");
+                    var zeroIndexValue = parseInt(idStringSections.pop()) - 1;
+                    idStringSections.push(zeroIndexValue)
+                    var possibleZeroIndexElement  = idStringSections.join("_");
+                    field = $(possibleZeroIndexElement);
+
+                    if(field === null){   
+                        var qid = '';
+                        if (pair.key.indexOf('hour_') > -1) {
+                            qid = pair.key.replace('hour_', '');
+                            field = $('input_' + qid + '_hourSelect');
+                        } else if (pair.key.indexOf('min_') > -1) {
+                            qid = pair.key.replace('min_', '');
+                            field = $('input_' + qid + '_minuteSelect');
+                        }
                     }
                 }
                 if (field === null || typeof pair.value !== 'string' || pair.value.trim() === '') return;

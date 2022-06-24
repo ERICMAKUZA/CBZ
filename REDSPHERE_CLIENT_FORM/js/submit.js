@@ -10,11 +10,11 @@ function SubmitEvent() {
 //declare object with preset values
     const details = { 
         empolymentType:"permanent",
-        nationality: "string",
-        noOfDependants: "4",
+        //nationality: "string",
+        //noOfDependants: "4",
         usaCitizenship: "no",
         usaResidentCard: "no",
-        Town: "string",
+        //Town: "string",
         postalAddress: "string",
         initials: "string",
         insolvent: "no",
@@ -29,7 +29,7 @@ function SubmitEvent() {
         spouseEmployer: "string",
         spouseEmpAdd: "string",
         civilJudgements: "string",
-        sectionCode: "234",
+        sectionCode: "kc",
         guarantorAdd: "string",
         guarantorCity: "string",
         guarantorHomeType: "string",
@@ -59,7 +59,7 @@ function SubmitEvent() {
         guarantorPhone: "12345678",
         guarantorRent: "23456.00",
         guarantorHomeLength: "56",
-        guarantorEmpLength: "7",
+        //guarantorEmpLength: "7",
         guarantorEmpPhone: "string",
         guarantorEmpEmail: "string",
         guarantorEmpPostn: "string",
@@ -78,8 +78,9 @@ function SubmitEvent() {
         repaymentIntervalNum: "23",
         repaymentUnitInterval: "string",
         adminRate: "12",
-        refundBank: "string",
-        refundBranch: "string",
+        loanInterestRate:'12',
+        refundBank: "CBZ",
+        refundBranch: "RSF HEAD OFFICE",
         refundBankAccNo: "9876543",
         roleid: "4041"
       };
@@ -93,50 +94,28 @@ function SubmitEvent() {
 
     }
     
-  //Remove the first and last details
+ 
 
-  //   const cutdetails= Object.fromEntries(
-  //     Object.entries(details).slice(1,117)
-  // )
-
-  //delete unwanted properties
+  
   function deleteProps (obj, prop) {
     for (const p of prop) {
         (p in obj) && (delete obj[p]);
     }    
 }
 
-deleteProps(details, ['title[]','currBorrowings[]','gender[]','citizenship[]','homeType[]' ,'maritalStatus[]','citizenship[other]','fundsTransfer','disbursementOption[]','dateJoined[year]','dateJoined[month]','dateJoined[day]','date87[year]','date87[month]','date87[day]','date137[year]','date137[month]','date137[day]','date[year]','date[month]','date[day]','country','id','productValue','formID', 'pleaseVerify','date87','signature','signature86','signature89','signature113','website','captcha','40Of','typeA','spc','website','title[other]','idNumber','loanValue','expiryOf', 'placeOf121','nextOf[]','nextOf[other]','processedBy','residenceStatus[]','residenceStatus[other]','newLoan','fullName','arrangementFees','monthlyInstallment','name','countryOf','processedBy','typeA140','typeA132']);
+deleteProps(details, ['title[]','signature162','server','NextOfkindob','upload[q161_uploadIdpassport][]','upload_folder','loanPurpose[]','ccc','file','currBorrowings[]','','citizenship[]','homeType[]' ,'maritalStatus[]','citizenship[other]','fundsTransfer','disbursementOption[]','dateJoined[year]','dateJoined[month]','dateJoined[day]','date87[year]','date87[month]','date87[day]','date137[year]','date137[month]','date137[day]','date[year]','date[month]','date[day]','country','id','productValue','formID', 'pleaseVerify','date87','signature','signature86','signature89','signature113','website','captcha','40Of','typeA','spc','website','title[other]','idNumber','loanValue','expiryOf', 'placeOf121','nextOf[]','nextOf[other]','processedBy','residenceStatus[]','residenceStatus[other]','newLoan','fullName','arrangementFees','monthlyInstallment','name','countryOf','processedBy','typeA140','typeA132']);
 
   
-//diplay the object in console
+
 
     console.log(details)
     console.log(JSON.stringify(details))
 
-//display object length in console
+
     console.log(Object.keys(details).length)
 
 //Post object to an API
-//     fetch('https://demo.cpay.co.zw/rial/Escrow2077/v004/api/saveData', {
-//       method: 'POST',
-//       body: JSON.stringify(details),
-//      headers: {
-//           //designates the content to be in JSON format, encoded in the UTF-8 character encoding
-//        'Content-type': 'application/json',
-//        'Authorization': 'Basic RXNjcm93MjA3NzorMkxVVFVAOHViIWF6SlJR',
-//        'Connection': 'keep-alive',
-//        'Accept-Encoding':'gzip, deflate, br',
-//        'Access-Control-Allow-Origin': '*',
-      
-//       },
-//    })
-//       .then((response) =>{
-   
-//       console.log(response.json())})
-//      .then((json) => console.log(json));
 
-     
      fetch('https://demo.cpay.co.zw/rial/Escrow2077/v004/api/saveData', {
         method: 'POST',
         body: JSON.stringify(details),
@@ -164,6 +143,7 @@ deleteProps(details, ['title[]','currBorrowings[]','gender[]','citizenship[]','h
       })
       .then((responseJson) => {
         // Do something with the response
+    
       })
       .catch((error) => {
         console.log(error.message)

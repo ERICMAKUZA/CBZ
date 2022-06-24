@@ -1,6 +1,8 @@
 @import "/form-resources/dist/styles/control_appointment.css";
 @import "/form-resources/dist/styles/control_inline.css";
-
+* {
+	box-sizing: border-box;
+}
 .form-all {
 	font-size:14px;
 	color:#000;
@@ -16,7 +18,6 @@
 	padding-right:36px;
 	margin:6px 0;
 	width:100%;
-	box-sizing: border-box;
 }
 
 .form-label-top,
@@ -27,9 +28,8 @@
 }
 
 .form-label-right {
-	margin-right:0;
-	padding-right:15px;
-	box-sizing:border-box;
+	margin-right: 0;
+	padding-right: 15px;
 }
 
 .form-textbox,
@@ -65,17 +65,12 @@
 }
 
 .stripe-payment-wrapper .form-address-table.payment-form-table .form-sub-label-container {
-	width: 96% !important;
+	width: 96%;
+	padding-top: 12px;
 }
 
 .stripe-payment-wrapper .form-address-table.payment-form-table .form-sub-label-container input{
 	width: 100%;
-	box-sizing: border-box;
-}
-
-.stripe-payment-wrapper .form-textbox.cc_ccv,
-.stripe-payment-wrapper .form-textbox.cc_ccvMount {
-	width: 42px;
 }
 
 .stripe-payment-wrapper .form-textbox.cc_number,
@@ -85,16 +80,13 @@
 .stripe-payment-wrapper .form-textbox.cc_cardExpiryMount {
 	padding: 1px 4px 0px 4px;
 	height: 29px;
-	line-height: 25px !important;
 	white-space: nowrap;
-	box-sizing: border-box;
 	font-size: 1em;
 }
 .stripe-payment-wrapper .form-textbox.cc_numberMount,
 .stripe-payment-wrapper .form-textbox.cc_cardExpiryMount {
 	min-width: 155px;
 	width: 100%;
-	box-sizing: border-box;
 }
 
 .stripe-payment-wrapper .payment-form-table td:first-child .form-sub-label-container {
@@ -134,24 +126,19 @@
 .paypalcomplete-payment-wrapper .form-textbox.cc_cardExpiryMount {
 	padding: 1px 4px 0px 4px;
 	height: 29px;
-	line-height: 25px !important;
 	white-space: nowrap;
-	box-sizing: border-box;
 	font-size: 1em;
 }
 .paypalcomplete-payment-wrapper .form-textbox.cc_numberMount,
 .paypalcomplete-payment-wrapperr .form-textbox.cc_cardExpiryMount {
 	min-width: 155px;
 	width: 100%;
-	box-sizing: border-box;
 }
 
 /*  E.O. special for paypalcomplete - credit and details*/
 
 .form-all .form-upload {
 	border:none;
-	-moz-box-shadow: none;
-	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
@@ -337,7 +324,6 @@ li:not([data-type="control_phone"]) input[data-component="phone"] {
 	background-color:#FF4E5D;
 	color:#fff;
 	padding: 5px;
-	box-sizing: border-box;
 }
 
 li.form-line-error .form-error-message img {
@@ -629,9 +615,6 @@ screen and (max-device-width: 415px) and (orientation: landscape) {
 
 
 /* Payments: PayPal Commarce Platform */
-#paypal-commerce-platform-container * {
-	box-sizing: border-box;
-}
 
 #paypal-commerce-platform-container {
 	overflow: hidden;
@@ -646,7 +629,6 @@ screen and (max-device-width: 415px) and (orientation: landscape) {
 
 .paypal-toggle > div {
 	width: 100%;
-	box-sizing: border-box;
 	border: 0;
 	background-color: transparent;
 	border-radius: 0;
@@ -751,11 +733,8 @@ div[render-paypal-type="paypal-smart-buttons"] .content-area {
 
 #paypal-credit-card-fields .paypal-input {
 	float: left;
-	/*padding-bottom: 16px;
-	padding-right: 12px;*/
 	padding-bottom: 10px;
 	padding-right: 10px;
-	box-sizing: border-box;
 }
 
 #paypal-credit-card-fields .paypal-input label {
