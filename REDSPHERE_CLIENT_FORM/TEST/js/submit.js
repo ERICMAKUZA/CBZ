@@ -11,7 +11,6 @@ function SubmitEvent() {
     const details = { 
         
       };
-  
  //Loop through form data and add in object
     for (let key of fd.keys()) {
     
@@ -20,48 +19,42 @@ function SubmitEvent() {
     details[after]=fd.get(key);
 
     }
-    
- 
-
   
   function deleteProps (obj, prop) {
     for (const p of prop) {
         (p in obj) && (delete obj[p]);
     }    
-}
+     }
 
 deleteProps(details, ['title[]','signature162','server','NextOfkindob','upload[q161_uploadIdpassport][]','upload_folder','loanPurpose[]','ccc','file','currBorrowings[]','','citizenship[]','homeType[]' ,'maritalStatus[]','citizenship[other]','fundsTransfer','disbursementOption[]','dateJoined[year]','dateJoined[month]','dateJoined[day]','date87[year]','date87[month]','date87[day]','date137[year]','date137[month]','date137[day]','date[year]','date[month]','date[day]','country','id','productValue','formID', 'pleaseVerify','date87','signature','signature86','signature89','signature113','website','captcha','40Of','typeA','spc','website','title[other]','idNumber','loanValue','expiryOf', 'placeOf121','nextOf[]','nextOf[other]','processedBy','residenceStatus[]','residenceStatus[other]','newLoan','fullName','arrangementFees','monthlyInstallment','name','countryOf','processedBy','typeA140','typeA132']);
 
   
 Object.keys(details).forEach((k) => {
-//console.log(k.substr(0,10));
 if(k.substr(0,10)==='branchName'){
 details[k] == '' && delete details[k]
+details['branchName'] = details[k];
+//const ky=details[k];
+//const Code =ky.substring(ky.indexOf('-') + 1 );
+const {branchName } = details;
+console.log(branchName.substring(branchName.indexOf('-') + 1 ));
+//console.log(ky.substring(ky.indexOf('-') + 1 ))
+delete details[k];
+
 }
 }
 );
 
-//renaming fields
-function renameKeys(obj, newKeys) {
-  const keyValues = Object.keys(obj).map(key => {
-    const newKey = newKeys[key] || key;
-    return { [newKey]: obj[key] };
-  });
-  return Object.assign({}, ...keyValues);
-}
 
-const newKeys = { branchName_ZB: "branchName"}
+// Object.keys(details).forEach((k) => {
+//   if(k==='branchName'){
 
-const renamedObj = renameKeys(details, newKeys);
-console.log(renamedObj);
+  //const Code =ky.substring(ky.indexOf('-') + 1 );
+ 
+  details.branchCode='6789';
 
 
-    // console.log(details)
-    // console.log(JSON.stringify(details))
+  const property = 'branchCode';
 
-
-    console.log(Object.keys(details).length)
-    window.stop();
 
 //Post object to an API
 
